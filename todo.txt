@@ -1,0 +1,5 @@
+wychodzenie z programu po przegranej
+kolizja ze sobą
+punkty
+kolory
+restart
