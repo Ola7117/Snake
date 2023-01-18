@@ -43,19 +43,21 @@ class SnakeGame:
             pygame.quit()
             exit()                
 
+    root = Tk()
+
     def check_collisions(self):
         if self.snake.collides_with(self.food):
             self.snake.grow()
             self.food.spawn()
             self.snake.speed += 2
         if self.snake.collides_with_wall():
-            root = Tk()
-            messagebox.showinfo(title=None, message="Przegrana :(")
-            #close_button = Button(root, text = "Zamknij", command = root.quit)
-            #close_button.pack()
-            root.withdraw()
+            #root = Tk()
+            #messagebox.showinfo(title=None, message="Przegrana :(")
+            close_button = Button(self.root, text = "Zamknij", command = self.close_window)
+            close_button.pack()
+            #self.root.withdraw()
             #self.root.after(1000, self.close_game)
-            root.mainloop()
+            self.root.mainloop()
             self.running = False
 
     def draw(self):
@@ -64,6 +66,7 @@ class SnakeGame:
         self.food.draw(self.screen)
         pygame.display.update()
     
-    # def close_game(self):
-    #     self.root.destroy()
+    def close_window(self):
+        #if messagebox.askokcancel("Komunikat", "Czy na pewno chcesz zamknąć okno?"):
+        self.root.destroy()
     #     #pygame.quit()
