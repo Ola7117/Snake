@@ -12,6 +12,7 @@ class Snake:
         x += self.direction[0]
         y += self.direction[1]
 
+        # To chyba trzeba przenieść
         for event in pygame.event.get():
             # if event.type == pygame.QUIT:
             #         pygame.display.quit()

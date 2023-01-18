@@ -3,3 +3,6 @@ kolizja ze sobą
 punkty
 kolory
 restart
+ranking
+jedna pętla
+zabezpieczenia?
