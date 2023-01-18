@@ -13,24 +13,34 @@ class Snake:
         y += self.direction[1]
 
         # To chyba trzeba przenieść
-        for event in pygame.event.get():
-            # if event.type == pygame.QUIT:
-            #         pygame.display.quit()
-            #         pygame.quit()
-            #         exit()
+        # for event in pygame.event.get():
+        #     # if event.type == pygame.QUIT:
+        #     #         pygame.display.quit()
+        #     #         pygame.quit()
+        #     #         exit()
 
-            if event.type == pygame.KEYDOWN:
-                if (event.key == pygame.K_UP or event.key == pygame.K_w) and self.direction != (0, 10):
-                    self.direction = (0, -10)
-                if (event.key == pygame.K_LEFT or event.key == pygame.K_a) and self.direction != (10, 0):
-                    self.direction = (-10, 0)
-                if (event.key == pygame.K_DOWN or event.key == pygame.K_s) and self.direction != (0, -10):
-                    self.direction = (0, 10)
-                if (event.key == pygame.K_RIGHT or event.key == pygame.K_d) and self.direction != (-10, 0):
-                    self.direction = (10, 0)
-        
+        #     if event.type == pygame.KEYDOWN:
+        #         if (event.key == pygame.K_UP or event.key == pygame.K_w) and self.direction != (0, 10):
+        #             self.direction = (0, -10)
+        #         if (event.key == pygame.K_LEFT or event.key == pygame.K_a) and self.direction != (10, 0):
+        #             self.direction = (-10, 0)
+        #         if (event.key == pygame.K_DOWN or event.key == pygame.K_s) and self.direction != (0, -10):
+        #             self.direction = (0, 10)
+        #         if (event.key == pygame.K_RIGHT or event.key == pygame.K_d) and self.direction != (-10, 0):
+        #             self.direction = (10, 0)
         self.body.insert(0, (x, y))
-        self.body.pop()
+        self.body.pop()\
+    
+    def change_direction(self, event):
+        if event.type == pygame.KEYDOWN:
+            if (event.key == pygame.K_UP or event.key == pygame.K_w) and self.direction != (0, 10):
+                self.direction = (0, -10)
+            if (event.key == pygame.K_LEFT or event.key == pygame.K_a) and self.direction != (10, 0):
+                self.direction = (-10, 0)
+            if (event.key == pygame.K_DOWN or event.key == pygame.K_s) and self.direction != (0, -10):
+                self.direction = (0, 10)
+            if (event.key == pygame.K_RIGHT or event.key == pygame.K_d) and self.direction != (-10, 0):
+                self.direction = (10, 0)
         
     def collides_with(self, food):
         return self.body[0] == food.position

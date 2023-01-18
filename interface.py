@@ -1,7 +1,7 @@
 import pygame
 from logic import Snake, Food
 from sys import exit
-from tkinter import messagebox, Tk
+from tkinter import messagebox, Tk, Button
 
 class SnakeGame:
     def __init__(self):
@@ -10,28 +10,38 @@ class SnakeGame:
         self.snake = Snake()
         self.food = Food()
         self.clock = pygame.time.Clock()
+        
+    running = True
 
     def run(self):
-        running = True
-        while running:
+        #running = True
+        while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    running = False
-                    pygame.display.quit()
-                    pygame.quit()
-                    exit()
+                    self.running = False
+                    #pygame.display.quit()
+                    #pygame.quit()
+                    #exit()
+                self.snake.change_direction(event)
 
             self.clock.tick(self.snake.speed)
             self.snake.move()
             self.check_collisions()
             self.draw()
 
-            print(running)
 
-            # if running == False:
-            #     pygame.display.quit()
-            #     pygame.quit()
-            #     exit()                
+
+            #for event in pygame.event.get():
+            # if event.type == pygame.QUIT:
+            #         pygame.display.quit()
+            #         pygame.quit()
+            #         exit()
+
+        event = pygame.event.get()     
+        if event.type == pygame.QUIT:
+            pygame.display.quit()
+            pygame.quit()
+            exit()                
 
     def check_collisions(self):
         if self.snake.collides_with(self.food):
@@ -40,8 +50,11 @@ class SnakeGame:
             self.snake.speed += 2
         if self.snake.collides_with_wall():
             root = Tk()
-            root.withdraw()
             messagebox.showinfo(title=None, message="Przegrana :(")
+            #close_button = Button(root, text = "Zamknij", command = root.quit)
+            #close_button.pack()
+            root.withdraw()
+            #self.root.after(1000, self.close_game)
             root.mainloop()
             self.running = False
 
@@ -50,3 +63,7 @@ class SnakeGame:
         self.snake.draw(self.screen)
         self.food.draw(self.screen)
         pygame.display.update()
+    
+    # def close_game(self):
+    #     self.root.destroy()
+    #     #pygame.quit()
