@@ -54,8 +54,11 @@ class Food:
     def __init__(self):
         self.position = (400, 300)
 
-    def spawn(self, screen_width, screen_height):
-        self.position = (randint(0, screen_width / 10 - 1) * 10, randint(0, screen_height / 10 - 1) * 10)
+    def spawn(self, screen_width, screen_height, snake_body):
+        new_position = snake_body[0]
+        while new_position in snake_body:
+            new_position = (randint(0, screen_width / 10 - 1) * 10, randint(0, screen_height / 10 - 1) * 10)
+        self.position = new_position
 
     def draw(self, screen):
         pygame.draw.rect(screen, red, (self.position[0], self.position[1], 10, 10))

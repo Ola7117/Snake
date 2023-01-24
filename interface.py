@@ -62,7 +62,7 @@ class SnakeGame:
     def check_collisions(self):
         if self.snake.collides_with_food(self.food):
             self.snake.grow()
-            self.food.spawn(self.screen_width, self.screen_height)
+            self.food.spawn(self.screen_width, self.screen_height, self.snake.body)
             self.score.value += 1
             self.snake.speed += 1
         if self.snake.collides_with_wall(self.screen_width, self.screen_height) or self.snake.collides_with_itself():
