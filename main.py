@@ -1,4 +1,3 @@
 from interface import SnakeGame
 
-game = SnakeGame()
-game.run()
+SnakeGame.start(True)

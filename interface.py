@@ -1,72 +1,97 @@
+from colors import pink, red
+from data import Score
+from logic import Food, Snake
 import pygame
-from logic import Snake, Food
-from sys import exit
-from tkinter import messagebox, Tk, Button
 
 class SnakeGame:
+
     def __init__(self):
         pygame.init()
-        self.screen = pygame.display.set_mode((800, 600))
+        self.screen_width = 600
+        self.screen_height = 400
+        self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
+        self.screen.fill(pink)
+        pygame.display.set_caption("Snake by A. Hinc, V. Melnik, Z. Gąsienica-Samek")
+        self.font = pygame.font.SysFont("Lucida Console", 20)
         self.snake = Snake()
         self.food = Food()
+        self.score = Score()
         self.clock = pygame.time.Clock()
-        
-    running = True
+        self.game_over = False
+        self.game_close = False
 
     def run(self):
-        #running = True
-        while self.running:
+        while not self.game_over:
+
+            while self.game_close:
+                self.screen.fill(pink)
+                self.display_score()
+                self.display_highscore()
+                self.message("Przegrana! R - restart, Esc - wyjście", red)
+                pygame.display.update()
+
+                for event in pygame.event.get():
+                    self.restart_or_quit(event)
+
             for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    self.running = False
-                    #pygame.display.quit()
-                    #pygame.quit()
-                    #exit()
+                self.restart_or_quit(event)
                 self.snake.change_direction(event)
 
             self.clock.tick(self.snake.speed)
             self.snake.move()
             self.check_collisions()
             self.draw()
+            self.score.update_highscore()
 
+        pygame.quit()
+        quit()   
 
+    def message(self, text, color):
+        text = self.font.render(text, True, color)
+        text_rect = text.get_rect(center = (self.screen_width / 2, self.screen_height / 2))
+        self.screen.blit(text, text_rect)
 
-            #for event in pygame.event.get():
-            # if event.type == pygame.QUIT:
-            #         pygame.display.quit()
-            #         pygame.quit()
-            #         exit()
+    def display_score(self):
+        text = self.font.render("Wynik: " + str(self.score.value), True, red)
+        self.screen.blit(text, [25, 10])
 
-        event = pygame.event.get()     
-        if event.type == pygame.QUIT:
-            pygame.display.quit()
-            pygame.quit()
-            exit()                
-
-    root = Tk()
+    def display_highscore(self):
+        text = self.font.render("Rekord: " + str(self.score.highscore), True, red)
+        self.screen.blit(text, [self.screen_width - 150, 10])
 
     def check_collisions(self):
-        if self.snake.collides_with(self.food):
+        if self.snake.collides_with_food(self.food):
             self.snake.grow()
-            self.food.spawn()
-            self.snake.speed += 2
-        if self.snake.collides_with_wall():
-            #root = Tk()
-            #messagebox.showinfo(title=None, message="Przegrana :(")
-            close_button = Button(self.root, text = "Zamknij", command = self.close_window)
-            close_button.pack()
-            #self.root.withdraw()
-            #self.root.after(1000, self.close_game)
-            self.root.mainloop()
-            self.running = False
+            self.food.spawn(self.screen_width, self.screen_height)
+            self.score.value += 1
+            self.snake.speed += 1
+        if self.snake.collides_with_wall(self.screen_width, self.screen_height) or self.snake.collides_with_itself():
+            self.game_close = True
 
     def draw(self):
-        self.screen.fill((0, 0, 0))
+        self.screen.fill(pink)
         self.snake.draw(self.screen)
         self.food.draw(self.screen)
+        self.display_score()
+        self.display_highscore()
         pygame.display.update()
     
-    def close_window(self):
-        #if messagebox.askokcancel("Komunikat", "Czy na pewno chcesz zamknąć okno?"):
-        self.root.destroy()
-    #     #pygame.quit()
+    @staticmethod
+    def start(first_game):
+        game = SnakeGame()
+        if first_game:
+            game.message("R - restart, Esc - wyjście", red)
+            pygame.display.update()
+            pygame.time.delay(1500)
+        game.run()
+    
+    def restart_or_quit(self, event):
+        if event.type == pygame.QUIT:
+            self.game_over = True
+            self.game_close = False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_r:
+                self.start(False)
+            if event.key == pygame.K_ESCAPE:
+                self.game_over = True
+                self.game_close = False
