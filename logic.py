@@ -55,8 +55,11 @@ class Food:
         self.position = (400, 300)
 
     def spawn(self, screen_width, screen_height, snake_body):
+        score_side = 150
+        highscore_side = 440
+        scores_bottom = 30
         new_position = snake_body[0]
-        while new_position in snake_body:
+        while new_position in snake_body or ((new_position[0] <= score_side or new_position[0] >= highscore_side) and new_position[1] <= scores_bottom):
             new_position = (randint(0, screen_width / 10 - 1) * 10, randint(0, screen_height / 10 - 1) * 10)
         self.position = new_position
 
